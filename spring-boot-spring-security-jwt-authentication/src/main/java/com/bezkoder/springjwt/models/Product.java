@@ -2,6 +2,8 @@ package com.bezkoder.springjwt.models;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -71,6 +73,7 @@ public class Product {
 	@Column(columnDefinition = "MEDIUMBLOB")
 	private String p_image;
 
+//	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "c_id")
 	private Category category;

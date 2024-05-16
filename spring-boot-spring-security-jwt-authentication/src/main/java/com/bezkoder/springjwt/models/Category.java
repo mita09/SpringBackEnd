@@ -3,6 +3,12 @@ package com.bezkoder.springjwt.models;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,6 +22,8 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "category")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(value = Include.NON_DEFAULT)
 public class Category {
 
 	@Id
@@ -28,9 +36,10 @@ public class Category {
 
 	private Date createdDate;
 
-	@OneToMany(mappedBy = "category" ,cascade = CascadeType.ALL)
+//	@JsonManagedReference
+	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
 	private List<Product> productList;
-	
+
 //	public List<Product> getProductList() {
 //		return productList;
 //	}

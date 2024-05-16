@@ -28,7 +28,7 @@ public class TestController {
     return "Moderator Board.";
   }
 
-  @PostMapping("/admin")
+  @GetMapping("/admin")
   @PreAuthorize("hasRole('ADMIN')")
   public String adminAccess() {
     return "Admin Board.";

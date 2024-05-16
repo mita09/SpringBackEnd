@@ -59,6 +59,12 @@ public class AuthController {
 	@Autowired
 	RefreshTokenService refreshTokenService;
 
+	//	http://localhost:8088/api/auth/signin
+	//	{
+	//	    "username":"admin7",
+	//	    "password":"Admin@1234565852"
+	//	    
+	//	}
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -139,6 +145,8 @@ public class AuthController {
 					return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
 				}).orElseThrow(() -> new TokenRefreshExp(requestRefreshToken, "Refresh token is not in database!"));
 	}
+	
+	//	http://localhost:8088/api/auth/signout
 	@PostMapping("/signout")
 	  public ResponseEntity<?> logoutUser() {
 	    UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

@@ -3,6 +3,7 @@ package com.bezkoder.springjwt.controllers;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Base64;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,8 +22,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bezkoder.springjwt.models.Category;
 import com.bezkoder.springjwt.models.Product;
 import com.bezkoder.springjwt.payload.response.MessageResponse;
+import com.bezkoder.springjwt.security.services.CategoryService;
 import com.bezkoder.springjwt.security.services.ProductService;
 
 import jakarta.validation.Valid;
@@ -37,6 +40,9 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 
+	@Autowired
+	private CategoryService categoryService;
+
 	/**
 	 * List all products.
 	 *
@@ -44,10 +50,12 @@ public class ProductController {
 	 * @return
 	 */
 	@GetMapping("/")
-	public Iterable<Product> list(Model model) {
+	public List<Product> list(Model model) {
 		model.addAttribute("products", productService.listAllProducts());
+		model.addAttribute("categories", categoryService.listAllCategory());
+
 		System.out.println("Returning products:");
-		return productService.listAllProducts();
+		return (List<Product>) productService.listAllProducts();
 	}
 
 	/**
@@ -85,9 +93,12 @@ public class ProductController {
 		return "redirect:/product/" + product.getProductId();
 	}
 
+	// http://localhost:8088/products/saveproductwithimage
+	// Payload - body- formdata : image,name,price,isAvailable
 	@PostMapping(value = "/saveproductwithimage", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> saveProduct(@RequestParam("image") MultipartFile file, @RequestParam("name") String name,
-			@RequestParam("price") BigDecimal price, boolean isAvailable) {
+			@RequestParam("price") BigDecimal price, boolean isAvailable,
+			@RequestParam("category_id") Integer category_id) {
 		Product p = new Product();
 		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 		if (fileName.contains("..")) {
@@ -100,15 +111,16 @@ public class ProductController {
 		}
 		p.setName(name);
 		p.setPrice(price);
-		p.setP_image(fileName);
 		p.setAvailable(isAvailable);
+		Category cat = categoryService.getCategoryById(category_id);
+		p.setCategory(cat);
 		productService.saveProduct(p);
 		return ResponseEntity.ok(new MessageResponse("Product registered successfully!"));
 	}
 
 	/**
-	 * Delete product by its id.
-	 *
+	 * Delete product by its id. http://localhost:8088/products/203
+	 * 
 	 * @param id
 	 * @return
 	 */

@@ -7,7 +7,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
 
 /**
  * Product entity.
@@ -64,9 +66,23 @@ public class Product {
 	}
 
 	private boolean isAvailable;
-	
+
 	@Lob
 	@Column(columnDefinition = "MEDIUMBLOB")
 	private String p_image;
 
+	@ManyToOne
+	@JoinColumn(name = "c_id")
+	private Category category;
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+	
+	
+	
 }

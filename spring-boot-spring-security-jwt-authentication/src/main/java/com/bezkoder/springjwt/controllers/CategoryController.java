@@ -1,6 +1,7 @@
 package com.bezkoder.springjwt.controllers;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bezkoder.springjwt.models.Category;
+import com.bezkoder.springjwt.models.Product;
 import com.bezkoder.springjwt.repository.ProductRepository;
 import com.bezkoder.springjwt.security.services.CategoryService;
 
@@ -46,8 +48,13 @@ public class CategoryController {
 		return categoryService.listAllCategory();
 	}
 	@GetMapping("/cwithproduct/{id}")
-	public Category cwithproduct(@PathVariable Integer id) {
-		return categoryService.getCategoryById(id);
+	public List<Product> cwithproduct(@PathVariable Integer id) {
+
+//		List<Product> p=productRepository.findByc_id(id);
+//		System.out.println(p.size());
+		List<Product> p1=productRepository.findByCategoryCategoryId(id);
+		System.out.println("---"+p1.size());
+		return p1;
 	}
 
 	/**
